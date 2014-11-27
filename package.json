@@ -1,0 +1,29 @@
+{
+  "name": "punch-bridge",
+  "version": "1.0.0",
+  "description": "Application code for the Node.js bridge for relaying sensor data.",
+  "main": "app.js",
+  "dependencies": {
+    "request": "^2.48.0",
+    "noble": "^0.3.6"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/anthonysutardja/Punch-BLE-Bridge"
+  },
+  "keywords": [
+    "punch",
+    "ble",
+    "bridge"
+  ],
+  "author": "Anthony Sutardja",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/anthonysutardja/Punch-BLE-Bridge/issues"
+  },
+  "homepage": "https://github.com/anthonysutardja/Punch-BLE-Bridge"
+}
