@@ -3,7 +3,7 @@ This repository contains the application code to run the Punch BLE Bridge applic
 as an information relay between the device sensors and the Punch web server.
 
 ## Requirements
-You must have Node.js installed.
+You must have Node.js installed. Your bridge device must also support Bluetooth Low Energy (Bluetooth Smart).
 
 
 ## Installation
