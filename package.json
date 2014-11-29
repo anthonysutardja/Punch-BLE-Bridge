@@ -4,6 +4,8 @@
   "description": "Application code for the Node.js bridge for relaying sensor data.",
   "main": "app.js",
   "dependencies": {
+    "asyncblock": "^2.1.23",
+    "fibers": "^1.0.2",
     "noble": "^0.3.6",
     "node-uuid": "^1.4.1",
     "request": "^2.48.0"
