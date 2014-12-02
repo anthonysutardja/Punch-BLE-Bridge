@@ -52,6 +52,7 @@ PunchBridge.pushData = function(sensorData) {
                 console.log("An error occured while pushing sensor data.");
                 console.log(error);
             }
+            console.log(body);
         });
     }
 };
@@ -121,7 +122,7 @@ noble.on('discover', function(peripheral) {
                     data = PunchBridge.createSensorData(peripheral.uuid, tempReading, brixReading);
                     console.log(data);
                     // Disabled for now..
-                    // PunchBridge.pushData(data);
+                    PunchBridge.pushData(data);
                 });
             }
         });
@@ -133,3 +134,7 @@ noble.on('discover', function(peripheral) {
 
 PunchBridge.initalSetup();
 console.log("Punch Bridge UUID: " + PunchBridge.uuid);
+
+// Test Data
+// PunchBridge.pushData(PunchBridge.createSensorData('90123jdakfa00098', 32.0, 20.0));
+// console.log("Data pushed!");
