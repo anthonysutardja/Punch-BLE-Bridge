@@ -9,10 +9,9 @@ var asyncblock = require('asyncblock');
 var PUNCH_UUID_FILENAME = '.punch_uuid';
 var PUNCH_HOSTNAME = 'http://localhost:8000';
 
-var PUNCH_BLE_SERVICE_UUID =   'b0bb58205a0d11e493ee0002a5d5c51b';
-var PUNCH_BLE_TEMP_CHAR_UUID = '7a77be205a0d11e4a95e0002a5d5c51b';
-var PUNCH_BLE_BRIX_CHAR_UUID = '';
-
+var PUNCH_BLE_SERVICE_UUID =   '0cd8defe60f4439aa1fe02f4381657f9';
+var PUNCH_BLE_TEMP_CHAR_UUID = '18e6e0ded84f48889e06d1c6f30b6033';
+var PUNCH_BLE_BRIX_CHAR_UUID = 'fa4011e3104d4516b3d412c347112263';
 
 /* PunchBridge namespace */
 var PunchBridge = {};
@@ -107,7 +106,7 @@ noble.on('discover', function(peripheral) {
                 // Find each characteristic
                 // Make characteristic discoveries synchronous
                 asyncblock(function(flow) {
-                    var tempContents, tempReading, brixReading, data;
+                    var tempContents, tempReading, brixContents, brixReading, data;
                     // Get the temperature reading
                     punchService.discoverCharacteristics([PUNCH_BLE_TEMP_CHAR_UUID], flow.set('tempContents'));
                     tempContents = flow.get('tempContents');
@@ -116,13 +115,17 @@ noble.on('discover', function(peripheral) {
                     console.log("READING: " + tempReading);
 
                     // TODO: add BRIX measurement
-                    brixReading = 10.0;
+                    punchService.discoverCharacteristics([PUNCH_BLE_BRIX_CHAR_UUID], flow.set('brixContents'));
+                    brixContents = flow.get('brixContents');
+                    brixContents[0].read(flow.set('brixReading'));
+                    brixReading = flow.get('brixReading').readFloatLE(0);
+                    console.log("READING: " + brixReading);
 
                     // Push the data to the server
                     data = PunchBridge.createSensorData(peripheral.uuid, tempReading, brixReading);
                     console.log(data);
                     // Disabled for now..
-                    PunchBridge.pushData(data);
+                    // PunchBridge.pushData(data);
                 });
             }
         });
