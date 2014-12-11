@@ -7,7 +7,8 @@ var asyncblock = require('asyncblock');
 
 /* Settings */
 var PUNCH_UUID_FILENAME = '.punch_uuid';
-var PUNCH_HOSTNAME = 'http://localhost:8000';
+//var PUNCH_HOSTNAME = 'http://localhost:8000';
+var PUNCH_HOSTNAME = 'http://punchwine.herokuapp.com';
 
 var PUNCH_BLE_SERVICE_UUID =   '0cd8defe60f4439aa1fe02f4381657f9';
 var PUNCH_BLE_TEMP_CHAR_UUID = '18e6e0ded84f48889e06d1c6f30b6033';
