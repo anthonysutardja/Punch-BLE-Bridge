@@ -56,6 +56,29 @@ PunchBridge.pushData = function(sensorData) {
     }
 };
 
+
+/**
+ * Heartbeat of the device for debugging
+ * 
+ * @param  {Object} sensorData An object containing the fields expected for sensor data.
+ */
+PunchBridge.heartBeat = function() {
+    var options = {
+        uri: PUNCH_HOSTNAME + '/heartbeat',
+        method: 'GET',
+        timeout: 10000
+    };
+
+    request(options, function(error, response, body) {
+        if (error) {
+            console.log("An error occured while pushing sensor data.");
+            console.log(error);
+        }
+        console.log(body);
+    });
+};
+
+
 /**
  * Create a standard sensor data object.
  * 
@@ -97,6 +120,7 @@ noble.on('stateChange', function(state){
 
 // https://github.com/sandeepmistry/noble/wiki/Getting-started
 noble.on('discover', function(peripheral) {
+    //TODO: Add check for peripheral
     peripheral.connect(function(error) {
         console.log('  connected to peripheral: ' + peripheral.uuid);
         // Get the service containing the brix and temperature characteristics
@@ -112,20 +136,24 @@ noble.on('discover', function(peripheral) {
                     tempContents = flow.get('tempContents');
                     tempContents[0].read(flow.set('tempReading'));
                     tempReading = flow.get('tempReading').readFloatLE(0);
-                    console.log("READING: " + tempReading);
+                    console.log("         READING: " + tempReading);
 
-                    // TODO: add BRIX measurement
+                    // Get Brix measurement
                     punchService.discoverCharacteristics([PUNCH_BLE_BRIX_CHAR_UUID], flow.set('brixContents'));
                     brixContents = flow.get('brixContents');
                     brixContents[0].read(flow.set('brixReading'));
                     brixReading = flow.get('brixReading').readFloatLE(0);
-                    console.log("READING: " + brixReading);
+                    console.log("         READING: " + brixReading);
 
                     // Push the data to the server
                     data = PunchBridge.createSensorData(peripheral.uuid, tempReading, brixReading);
                     console.log(data);
                     // Disabled for now..
-                    // PunchBridge.pushData(data);
+                    PunchBridge.pushData(data);
+                });
+                peripheral.disconnect(function(error) {
+                    console.log('    disconnected from peripheral: ' + peripheral.uuid);
+                    process.exit(0);
                 });
             }
         });
@@ -137,6 +165,7 @@ noble.on('discover', function(peripheral) {
 
 PunchBridge.initalSetup();
 console.log("Punch Bridge UUID: " + PunchBridge.uuid);
+PunchBridge.heartBeat();
 
 // Test Data
 // PunchBridge.pushData(PunchBridge.createSensorData('90123jdakfa00098', 32.0, 20.0));
